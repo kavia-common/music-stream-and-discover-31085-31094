@@ -1,6 +1,12 @@
 import React from 'react';
-import { BrowserRouter, NavLink, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
+
+// Layout components
+import SidebarNav from './components/layout/SidebarNav';
+import Header from './components/layout/Header';
+import PlayerBar from './components/layout/PlayerBar';
+import PlaylistSidebar from './components/layout/PlaylistSidebar';
 
 // Route components (placeholders)
 import Browse from './routes/Browse';
@@ -24,28 +30,10 @@ function App() {
     <BrowserRouter>
       <div className="app-shell">
         {/* Left Navigation Sidebar */}
-        <aside className="sidebar" aria-label="Primary">
-          <div className="brand">
-            <span className="brand-badge" aria-hidden="true" />
-            WaveStream
-          </div>
-          <nav className="nav">
-            <NavLink to="/" end>🏠 Browse</NavLink>
-            <NavLink to="/search">🔎 Search</NavLink>
-            <NavLink to="/library">🎵 Library</NavLink>
-            <NavLink to="/discover">✨ Discover</NavLink>
-          </nav>
-          <div className="hr" />
-          <button className="btn">+ New Playlist</button>
-        </aside>
+        <SidebarNav onCreatePlaylist={() => { /* placeholder */ }} />
 
         {/* Top Header */}
-        <header className="header">
-          <div className="search" role="search">
-            <input placeholder="Search songs, artists, albums..." aria-label="Search" />
-          </div>
-          <button className="btn">Log in</button>
-        </header>
+        <Header />
 
         {/* Main Content - Routes */}
         <main className="main">
@@ -60,26 +48,12 @@ function App() {
         </main>
 
         {/* Right Playlist Sidebar */}
-        <aside className="rightbar" aria-label="Playlist Sidebar">
-          <div className="card">
-            <h3 style={{ marginTop: 0 }}>Queue</h3>
-            <p className="text-dim">Your upcoming tracks will appear here.</p>
-          </div>
-        </aside>
+        <PlaylistSidebar title="Queue">
+          <p className="text-dim">Your upcoming tracks will appear here.</p>
+        </PlaylistSidebar>
 
         {/* Bottom Player */}
-        <footer className="player" aria-label="Player Bar">
-          <div className="text-dim">No track playing</div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn">⏮</button>
-            <button className="btn primary">▶</button>
-            <button className="btn">⏭</button>
-          </div>
-          <div className="badge">
-            <span className="icon-circle">🔊</span>
-            0%
-          </div>
-        </footer>
+        <PlayerBar isPlaying={false} volume={0} />
       </div>
     </BrowserRouter>
   );

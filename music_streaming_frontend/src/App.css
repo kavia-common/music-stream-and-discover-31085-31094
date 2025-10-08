@@ -11,6 +11,7 @@
   height: 100vh;
   background: var(--bg);
   color: var(--text);
+  overflow: hidden;
 }
 
 /* Left navigation sidebar */
@@ -63,6 +64,10 @@
   background: var(--primary-50);
   color: var(--primary-700);
 }
+.nav a:focus-visible {
+  outline: 2px solid var(--primary-300);
+  outline-offset: 2px;
+}
 
 /* Top header */
 .header {
@@ -73,6 +78,9 @@
   align-items: center;
   padding: 0 var(--space-4);
   gap: var(--space-4);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .search {
@@ -127,7 +135,11 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 var(--space-4);
+  padding-bottom: calc(env(safe-area-inset-bottom) + 0px);
   box-shadow: var(--shadow-md-top);
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
 }
 
 /* Buttons */
