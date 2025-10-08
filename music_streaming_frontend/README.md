@@ -1,55 +1,49 @@
 # Lightweight React Template for KAVIA
 
-This project provides a minimal React template with a clean, modern UI and minimal dependencies.
-
-## Features
-
-- Lightweight: No heavy UI frameworks - uses only vanilla CSS and React
-- Modern UI: Clean, responsive design with KAVIA brand styling
-- Fast: Minimal dependencies for quick loading times
-- Simple: Easy to understand and modify
+Modern React single‑page app styled with the Ocean Professional theme. It includes routing, global state, a minimal audio engine (Web Audio API), and a mockable API layer.
 
 ## Getting Started
 
-In the project directory, you can run:
+From this folder:
 
-### `npm start`
+- npm start — run the app in development
+- npm test — run tests in watch mode
+- npm run build — production build
 
-Runs the app in development mode.  
-Open http://localhost:3000 to view it in your browser.
+Open http://localhost:3000 after starting.
 
-### `npm test`
+## Environment Configuration
 
-Launches the test runner in interactive watch mode.
+All variables use Create React App semantics (must be prefixed with REACT_APP_). You can define them in a local .env file.
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.  
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-## Environment configuration
-
-The app reads the following env variables (Create React App-style), all optional:
-
-- REACT_APP_API_BASE_URL: Base URL for the backend API (e.g., https://api.example.com)
+- REACT_APP_API_BASE_URL: Base URL of the backend API, e.g. https://api.example.com
 - REACT_APP_API_KEY: Optional API key; sent as Authorization: Bearer <key>
-- REACT_APP_USE_MOCK: If true, the app uses local mock fixtures for API calls (default true if base URL missing)
-- REACT_APP_ENABLE_ANALYTICS: Feature flag for analytics (not used yet)
+- REACT_APP_USE_MOCK: When true, use local mock fixtures for API calls
+- REACT_APP_ENABLE_ANALYTICS: Feature flag for optional analytics (not used yet)
 
-Example `.env`:
+Behavior:
+- If REACT_APP_API_BASE_URL is missing, the app automatically falls back to mock mode.
+- Explicitly set REACT_APP_USE_MOCK=true to force mock mode even if a base URL is provided.
 
-```
+Example .env:
+
 REACT_APP_API_BASE_URL=https://api.example.com
 REACT_APP_API_KEY=your-key
 REACT_APP_USE_MOCK=false
 REACT_APP_ENABLE_ANALYTICS=false
-```
 
-If REACT_APP_API_BASE_URL is missing, the app automatically falls back to mock mode.
+## Mock Mode vs Real API
+
+- Mock mode (default): No network calls. All data comes from src/api/mock/fixtures.json.
+  - To enable: omit REACT_APP_API_BASE_URL or set REACT_APP_USE_MOCK=true
+- Real API mode: Network calls go to REACT_APP_API_BASE_URL with optional Bearer token.
+  - To enable: set REACT_APP_API_BASE_URL and REACT_APP_USE_MOCK=false (or leave unset)
+
+Switching modes requires restarting the dev server for env changes to take effect.
 
 ## Keyboard Shortcuts (PlayerBar)
 
-Shortcuts are active when the PlayerBar is focused (Tab to the bottom bar):
+Shortcuts are active when the PlayerBar has focus (Tab to the bottom bar to focus it):
 
 - Space: Toggle Play/Pause
 - Ctrl + Right / Ctrl + Left: Next / Previous track
@@ -57,50 +51,35 @@ Shortcuts are active when the PlayerBar is focused (Tab to the bottom bar):
 - + / -: Volume up/down (5%)
 - Shift + Right / Shift + Left: Seek forward/backward 10 seconds
 
+## Running Tests
+
+- Smoke tests render all main routes and simulate a user gesture before any audio playback to satisfy autoplay restrictions in jsdom.
+- Audio and Web Audio APIs are stubbed in src/setupTests.js.
+
+Commands:
+
+- npm test — runs in watch mode
+- CI=true npm test — single run suitable for CI
+
+## Project Structure Highlights
+
+- src/App.js — app shell, routing, layout
+- src/state/* — minimal context + reducers
+- src/audio/AudioEngine.js — no-dependency audio wrapper over Web Audio API
+- src/api/* — API client and domain modules (mock-aware)
+- src/routes/* — pages: Browse (/), Search (/search), Library (/library), Playlist (/playlist/:id), Discover (/discover)
+- src/__tests__/app.smoke.test.jsx — route and audio smoke tests
+
 ## API Client and Mock Data
 
-- API helpers live in `src/api/client.js` and expose `get`, `post`, `put`, `del`.
-- Domain APIs are provided:
-  - `src/api/tracks.js`
-  - `src/api/playlists.js`
-  - `src/api/discovery.js`
-- Mock fixtures: `src/api/mock/fixtures.json` (includes a few public-domain audio URLs).
-  - When mock mode is enabled, these modules resolve Promises from the fixtures without network calls.
+- Fetch wrapper: src/api/client.js (get/post/put/del)
+- Domain APIs: tracks.js, playlists.js, discovery.js
+- Mock fixtures: src/api/mock/fixtures.json
+
+When mock mode is enabled, API modules resolve from fixtures without network calls.
 
 ## Customization
 
-### Colors
-
-The main brand colors are defined as CSS variables. See `src/theme/oceanTheme.css`.
-
-### Components
-
-This template uses pure HTML/CSS components instead of a UI framework. You can find component styles in `src/App.css`.
-
-## Learn More
-
-To learn React, check out the React documentation: https://reactjs.org/
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+- Theme tokens: src/theme/oceanTheme.css
+- Global styles and components: src/App.css and src/components/*
+- Utilities: src/utils/*
