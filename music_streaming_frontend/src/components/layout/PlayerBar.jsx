@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useStore } from '../../state/store';
 import useAudioPlayer from '../../audio/useAudioPlayer';
 import { formatTimeMMSS } from '../../utils/format';
@@ -22,6 +22,7 @@ export default function PlayerBar() {
     position,
     duration,
     seekTo,
+    _engine,
   } = useAudioPlayer();
 
   // Derive now playing label (mock uses id)
@@ -85,6 +86,9 @@ export default function PlayerBar() {
     seekTo(target);
   };
 
+  // When track id changes via next/prev, try to auto-load if engine has metadata with same id
+  // In this mock, routes call playTrack; here we ensure play/pause button reflects engine state via isPlaying.
+
   // Keyboard shortcuts when bar focused
   const containerRef = useRef(null);
   const onKeyDown = (e) => {
@@ -139,10 +143,40 @@ export default function PlayerBar() {
     }
   };
 
+  // Sync global play/pause with engine events (ended -> auto next if repeat/all)
+  useEffect(() => {
+    if (!_engine?.audio) return;
+    const onEnded = () => {
+      // If repeat one, restart same track
+      if (state.player.repeat === 'one') {
+        const cur = _engine.getCurrentTime();
+        const dur = _engine.getDuration();
+        // If duration is valid, loop to 0
+        if (Number.isFinite(dur)) {
+          seekTo(0);
+          _engine.play();
+          return;
+        }
+      }
+      // otherwise go next (respect repeat all via next())
+      next();
+    };
+    _engine.audio.addEventListener('ended', onEnded);
+    return () => {
+      _engine.audio.removeEventListener('ended', onEnded);
+    };
+  }, [_engine, next, seekTo, state.player.repeat]);
+
   // Accessible labels/state strings
   const playPauseLabel = isPlaying ? 'Pause' : 'Play';
   const volPercent = `${volume}%`;
   const posLabel = `${formatTimeMMSS(position)} of ${formatTimeMMSS(duration)}`;
+
+  // compute controlled slider values safely to avoid warnings
+  const timelineMax = Number.isFinite(duration) ? Math.max(0, Math.floor(duration)) : 0;
+  const timelineValue = Number.isFinite(duration)
+    ? Math.max(0, Math.min(Math.floor(position), Math.floor(duration)))
+    : 0;
 
   return (
     <footer
@@ -199,11 +233,12 @@ export default function PlayerBar() {
           {formatTimeMMSS(position)}
         </span>
         <input
+          className="range"
           type="range"
           min="0"
-          max={Number.isFinite(duration) ? Math.floor(duration) : 0}
+          max={timelineMax}
           step="1"
-          value={Number.isFinite(duration) ? Math.min(Math.floor(position), Math.floor(duration)) : 0}
+          value={timelineValue}
           aria-label="Seek slider"
           onChange={(e) => seekTo(Number(e.target.value))}
           style={{ flex: 1 }}
@@ -218,6 +253,7 @@ export default function PlayerBar() {
       <div className="badge" aria-label={`Volume ${volPercent}`} role="group" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <span className="icon-circle" aria-hidden="true">🔊</span>
         <input
+          className="range"
           type="range"
           min="0"
           max="100"

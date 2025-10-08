@@ -142,6 +142,46 @@
   z-index: 10;
 }
 
+/* Range inputs in player */
+.player .range {
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--primary-100);
+  outline: none;
+  border: 1px solid var(--primary-200);
+}
+.player .range:focus-visible {
+  outline: 2px solid var(--primary-300);
+  outline-offset: 2px;
+}
+.player .range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--primary-600);
+  border: 2px solid white;
+  box-shadow: var(--shadow-xs);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.player .range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--primary-600);
+  border: 2px solid white;
+  box-shadow: var(--shadow-xs);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.player .range:hover::-webkit-slider-thumb,
+.player .range:hover::-moz-range-thumb {
+  transform: scale(1.05);
+}
+
 /* Buttons */
 .btn {
   border: 1px solid var(--border);

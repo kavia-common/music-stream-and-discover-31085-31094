@@ -39,6 +39,13 @@ button {
   outline-offset: 2px;
 }
 
+/* Ensure buttons and inputs have visible focus inside dark/light surfaces */
+button:focus-visible,
+input[type="range"]:focus-visible,
+a:focus-visible {
+  box-shadow: 0 0 0 2px var(--primary-300);
+}
+
 /* Utility containers */
 .container {
   width: min(1200px, 100%);
