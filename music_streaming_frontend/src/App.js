@@ -15,6 +15,8 @@ import Library from './routes/Library';
 import Playlist from './routes/Playlist';
 import Discover from './routes/Discover';
 
+import { StoreProvider } from './state/store';
+
 // PUBLIC_INTERFACE
 function App() {
   /**
@@ -28,33 +30,35 @@ function App() {
    */
   return (
     <BrowserRouter>
-      <div className="app-shell">
-        {/* Left Navigation Sidebar */}
-        <SidebarNav onCreatePlaylist={() => { /* placeholder */ }} />
+      <StoreProvider>
+        <div className="app-shell">
+          {/* Left Navigation Sidebar */}
+          <SidebarNav onCreatePlaylist={() => { /* placeholder */ }} />
 
-        {/* Top Header */}
-        <Header />
+          {/* Top Header */}
+          <Header />
 
-        {/* Main Content - Routes */}
-        <main className="main">
-          <Routes>
-            <Route index element={<Browse />} />
-            <Route path="/search" element={<Search />} />
-            <Route path="/library" element={<Library />} />
-            <Route path="/playlist/:id" element={<Playlist />} />
-            <Route path="/discover" element={<Discover />} />
-            <Route path="*" element={<div className="card">Not Found</div>} />
-          </Routes>
-        </main>
+          {/* Main Content - Routes */}
+          <main className="main">
+            <Routes>
+              <Route index element={<Browse />} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/library" element={<Library />} />
+              <Route path="/playlist/:id" element={<Playlist />} />
+              <Route path="/discover" element={<Discover />} />
+              <Route path="*" element={<div className="card">Not Found</div>} />
+            </Routes>
+          </main>
 
-        {/* Right Playlist Sidebar */}
-        <PlaylistSidebar title="Queue">
-          <p className="text-dim">Your upcoming tracks will appear here.</p>
-        </PlaylistSidebar>
+          {/* Right Playlist Sidebar */}
+          <PlaylistSidebar title="Queue">
+            <p className="text-dim">Your upcoming tracks will appear here.</p>
+          </PlaylistSidebar>
 
-        {/* Bottom Player */}
-        <PlayerBar isPlaying={false} volume={0} />
-      </div>
+          {/* Bottom Player */}
+          <PlayerBar isPlaying={false} volume={0} />
+        </div>
+      </StoreProvider>
     </BrowserRouter>
   );
 }
