@@ -1,48 +1,87 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
+import React from 'react';
+import { BrowserRouter, NavLink, Routes, Route } from 'react-router-dom';
 import './App.css';
+
+// Route components (placeholders)
+import Browse from './routes/Browse';
+import Search from './routes/Search';
+import Library from './routes/Library';
+import Playlist from './routes/Playlist';
+import Discover from './routes/Discover';
 
 // PUBLIC_INTERFACE
 function App() {
-  const [theme, setTheme] = useState('light');
-
-  // Effect to apply theme to document element
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
-
-  // PUBLIC_INTERFACE
-  const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
-  };
-
+  /**
+   * App Shell using Ocean Professional theme.
+   * Layout regions:
+   * - sidebar (left navigation)
+   * - header (top search/actions)
+   * - main (content router outlet)
+   * - player (bottom now-playing bar)
+   * - rightbar (playlist sidebar)
+   */
   return (
-    <div className="App">
-      <header className="App-header">
-        <button 
-          className="theme-toggle" 
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-        >
-          {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
-        </button>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>
-          Current theme: <strong>{theme}</strong>
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="app-shell">
+        {/* Left Navigation Sidebar */}
+        <aside className="sidebar" aria-label="Primary">
+          <div className="brand">
+            <span className="brand-badge" aria-hidden="true" />
+            WaveStream
+          </div>
+          <nav className="nav">
+            <NavLink to="/" end>🏠 Browse</NavLink>
+            <NavLink to="/search">🔎 Search</NavLink>
+            <NavLink to="/library">🎵 Library</NavLink>
+            <NavLink to="/discover">✨ Discover</NavLink>
+          </nav>
+          <div className="hr" />
+          <button className="btn">+ New Playlist</button>
+        </aside>
+
+        {/* Top Header */}
+        <header className="header">
+          <div className="search" role="search">
+            <input placeholder="Search songs, artists, albums..." aria-label="Search" />
+          </div>
+          <button className="btn">Log in</button>
+        </header>
+
+        {/* Main Content - Routes */}
+        <main className="main">
+          <Routes>
+            <Route index element={<Browse />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/library" element={<Library />} />
+            <Route path="/playlist/:id" element={<Playlist />} />
+            <Route path="/discover" element={<Discover />} />
+            <Route path="*" element={<div className="card">Not Found</div>} />
+          </Routes>
+        </main>
+
+        {/* Right Playlist Sidebar */}
+        <aside className="rightbar" aria-label="Playlist Sidebar">
+          <div className="card">
+            <h3 style={{ marginTop: 0 }}>Queue</h3>
+            <p className="text-dim">Your upcoming tracks will appear here.</p>
+          </div>
+        </aside>
+
+        {/* Bottom Player */}
+        <footer className="player" aria-label="Player Bar">
+          <div className="text-dim">No track playing</div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className="btn">⏮</button>
+            <button className="btn primary">▶</button>
+            <button className="btn">⏭</button>
+          </div>
+          <div className="badge">
+            <span className="icon-circle">🔊</span>
+            0%
+          </div>
+        </footer>
+      </div>
+    </BrowserRouter>
   );
 }
 
