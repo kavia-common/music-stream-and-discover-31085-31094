@@ -1,0 +1,48 @@
+{
+  "tracks": [
+    {
+      "id": "t1",
+      "title": "Piano Sonata in C",
+      "artist": "Mozart",
+      "album": "Classical Essentials",
+      "duration": 125,
+      "streamingUrl": "https://archive.org/download/MozartPianoSonataKV545/Mozart_Piano_Sonata_KV545_1_Allegro.mp3",
+      "artworkUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Wolfgang-amadeus-mozart_1.jpg/256px-Wolfgang-amadeus-mozart_1.jpg"
+    },
+    {
+      "id": "t2",
+      "title": "Nocturne in E-flat Major",
+      "artist": "Chopin",
+      "album": "Chopin Collection",
+      "duration": 270,
+      "streamingUrl": "https://archive.org/download/Chopin_Nocturne_Op._9_No._2/Chopin_Nocturne_Op_9_No_2.mp3",
+      "artworkUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Chopin%2C_by_Wodzinska.JPG/256px-Chopin%2C_by_Wodzinska.JPG"
+    },
+    {
+      "id": "t3",
+      "title": "Symphony No. 5 - Allegro con brio",
+      "artist": "Beethoven",
+      "album": "Beethoven Symphonies",
+      "duration": 420,
+      "streamingUrl": "https://archive.org/download/BeethovenSymphony5Allegro/Beethoven_Symphony_5_Allegro.mp3",
+      "artworkUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Beethoven.jpg/256px-Beethoven.jpg"
+    }
+  ],
+  "playlists": [
+    {
+      "id": "p1",
+      "name": "Focus Classics",
+      "trackIds": ["t1", "t2"]
+    },
+    {
+      "id": "p2",
+      "name": "Heroic Symphonies",
+      "trackIds": ["t3"]
+    }
+  ],
+  "discover": {
+    "trending": ["t1", "t2", "t3"],
+    "newReleases": ["t2", "t3"],
+    "forYou": ["t1", "t3"]
+  }
+}
